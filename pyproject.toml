@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gpt4all-cli"
+version = "0.0.1"
+description = "Small cli for gpt4all"
+
+dependencies = [
+  'typer',
+  'gpt4all',
+]
+
+[project.optional-dependencies]
+develop = [
+  "ruff",
+  "ruff-lsp",
+]
+
+[project.scripts]
+gpt4all-cli = "gpt4allcli.main:main"
+
+[tool.ruff]
+line-length=200
+
+select = ["E4", "E7", "E9", "F", "B", "Q", "E", "W", "C90", "I", "N", "D", "UP", "YTT", "ANN", "S", "A", "C4", "T10", "G", "PIE", "Q", "RSE", "SLF", "SIM", "TID", "ARG", "ERA", "TRY", "FLY", "PERF", "FURB"]
+exclude = ["D103"]
+
+ignore = ["E501", "ANN101", "D100", "ANN201", "D103", "D104", "D202"]
+
+unfixable = ["B"]
+
