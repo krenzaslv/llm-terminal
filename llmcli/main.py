@@ -35,7 +35,7 @@ def chat(
     messages = [
         {
             "role": "system",
-            "content": "You are an assistant who gives rude answers.",
+            "content": "You are an assistant who gives answers.",
         },
     ]
 

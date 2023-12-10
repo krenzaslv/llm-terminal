@@ -5,7 +5,7 @@ Local cli for llms.
 ## Example usage
 
 ```
-cat pyproject.toml | llm-cli pipe --max-tokens 1000 "Give an explenation of the following file"
+cat pyproject.toml | llm-cli pipe --max-tokens 1000 "Explain this file"
 llm-cli chat
 ```
 
