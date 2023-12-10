@@ -3,13 +3,13 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "gpt4all-cli"
+name = "llm-cli"
 version = "0.0.1"
-description = "Small cli for gpt4all"
+description = "Small cli for llms"
 
 dependencies = [
   'typer',
-  'gpt4all',
+  'llama-cpp-python',
 ]
 
 [project.optional-dependencies]
@@ -19,7 +19,7 @@ develop = [
 ]
 
 [project.scripts]
-gpt4all-cli = "gpt4allcli.main:main"
+llm-cli = "llmcli.main:main"
 
 [tool.ruff]
 line-length=200

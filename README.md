@@ -1,12 +1,12 @@
-# CLI for gpt4all
+# CLI for Large Languge Models
 
-Local cli for gpt4all. For a list of available models check [https://gpt4all.io/index.html](https://gpt4all.io/index.html)
+Local cli for llms.
 
 ## Example usage
 
 ```
-cat pyproject.toml | gpt4all-cli pipe --max-tokens 1000 "Give an explenation of the following file"
-gpt4all-cli chat
+cat pyproject.toml | llm-cli pipe --max-tokens 1000 "Give an explenation of the following file"
+llm-cli chat
 ```
 
 ## Installation
@@ -14,5 +14,5 @@ gpt4all-cli chat
 ```
 python -m venv .venv
 . .venv/bin/activate
-pip install git+https://github.com/krenzaslv/gpt4all-cli.git
+pip install git+https://github.com/krenzaslv/llm-cli.git
 ```
