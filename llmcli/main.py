@@ -1,5 +1,6 @@
 import io
 import os
+import subprocess
 import sys
 from typing import Annotated
 
@@ -24,39 +25,73 @@ def chat(
     repeat_penalty: Annotated[float, typer.Option(help="Penalize the model for repetition. Higher values result in less repetition.")] = 1.1,
     max_tokens: Annotated[int, typer.Option(help="The maximum number of tokens to generate.")] = 200,
 ):
-    model_name = f"{os.path.expanduser('~/.cache/gpt4all/')}{model_name}"
-    if not os.path.exists(model_name):
-        print(f"No model found under {model_name}")
-
-    print("Loading model...")
-    llm = Llama(model_path=model_name, chat_format="chatml", verbose=False)
+    llm = get_model(model_name)
     print_welcome()
 
     messages = [
         {
             "role": "system",
-            "content": "You are an assistant who gives answers.",
+            "content": "You are an assistant who gives answers to everything a user asks.",
         },
     ]
 
     while True:
         prompt = input("User:<< ")
         messages.append({"role": "user", "content": prompt})
-        response_stream = llm.create_chat_completion(messages, temperature=temp, top_k=top_k, top_p=top_p, repeat_penalty=repeat_penalty, stream=True)
+        response_stream = llm.create_chat_completion(messages, temperature=temp, max_tokens=max_tokens, top_k=top_k, top_p=top_p, repeat_penalty=repeat_penalty, stream=True)
         responses = []
 
-        writer = io.StringIO()
         for r in response_stream:
             if "content" not in r["choices"][0]["delta"]:
                 continue
 
-            token = r["choices"][0]["delta"]["content"]
+            token = r["choices"][0]["delta"]["content"].replace("<0x0A>", "\n")
+            token = token.replace("<br>", "\n")
             print(token, end="", flush=True)
-            writer.write(token)
             responses.append(token)
 
         print("")
         messages.append({"role": "assistant", "content": "".join(responses)})
+
+
+@app.command("cli")
+def cli(
+    prompt: Annotated[str, typer.Argument(help="Prompt what bash script to generate")],
+    model_name: Annotated[str, typer.Option(help="Model name")] = "go-bruins-v2.Q5_K_M.gguf",
+    temp: Annotated[float, typer.Option(help="The model temperature between 0-1. Larger values increase creativity but decrease factuality.")] = 0.2,
+    top_k: Annotated[int, typer.Option(help="Top k")] = 40,
+    top_p: Annotated[float, typer.Option(help="Randomly sample at each generation step from the top most likely tokens whose probabilities add up to top_p.")] = 0.95,
+    repeat_penalty: Annotated[float, typer.Option(help="Penalize the model for repetition. Higher values result in less repetition.")] = 1.1,
+    max_tokens: Annotated[int, typer.Option(help="The maximum number of tokens to generate.")] = 200,
+):
+    llm = get_model(model_name)
+    messages = [
+        {
+            "role": "system",
+            "content": "You are a terminal assistant that generates bash scripts from a given input. Print results to stdout except if asked otherwise.",
+        },
+        {
+            "role": "user",
+            "content": f"{prompt}",
+        },
+    ]
+
+    response_stream = llm.create_chat_completion(messages, temperature=temp, top_k=top_k, max_tokens=max_tokens, top_p=top_p, repeat_penalty=repeat_penalty, stream=True)
+    responses = []
+
+    for r in response_stream:
+        if "content" not in r["choices"][0]["delta"]:
+            continue
+
+        token = r["choices"][0]["delta"]["content"].replace("<0x0A>", "\n")
+        token = token.replace("<br>", "\n")
+        print(token, end="", flush=True)
+        responses.append(token)
+
+    print("")
+    execute = typer.confirm("Do you want to execute the command?")
+    if execute:
+        subprocess.run(["sh", "-c", f'{"".join(responses)}'])
 
 
 @app.command("pipe")
@@ -69,30 +104,38 @@ def pipe(
     repeat_penalty: Annotated[float, typer.Option(help="Penalize the model for repetition. Higher values result in less repetition.")] = 1.1,
     max_tokens: Annotated[int, typer.Option(help="The maximum number of tokens to generate.")] = 200,
 ):
-    model_name = f"{os.path.expanduser('~/.cache/gpt4all/')}{model_name}"
-    if not os.path.exists(model_name):
-        print(f"No model found under {model_name}")
+    llm = get_model(model_name)
 
     input = "".join(list(sys.stdin))
-
-    llm = Llama(model_path=model_name, chat_format="chatml", verbose=False)
-
     prompt = [
         {
             "role": "system",
-            "content": f"You will be asked to do something on the following input.\nINPUT: {input}",
+            "content": f"You will be asked to do something on the following input: \n{input}",
         },
         {
             "role": "user",
             "content": f"{prompt}",
         },
     ]
-    response = llm(str(prompt), temperature=temp, top_k=top_k, top_p=top_p, max_tokens=max_tokens, repeat_penalty=repeat_penalty)
-    token = response["choices"][0]["text"]
+    response_stream = llm.create_chat_completion(prompt, temperature=temp, top_k=top_k, max_tokens=max_tokens, top_p=top_p, repeat_penalty=repeat_penalty, stream=True)
 
-    writer = io.StringIO()
-    print(token)
-    writer.write(token)
+    for r in response_stream:
+        if "content" not in r["choices"][0]["delta"]:
+            continue
+
+        token = r["choices"][0]["delta"]["content"].replace("<0x0A>", "\n")
+        token = token.replace("<br>", "\n")
+        print(token, end="", flush=True)
+
+
+def get_model(model_name: str):
+    model_name = f"{os.path.expanduser('~/.cache/gpt4all/')}{model_name}"
+    if not os.path.exists(model_name):
+        print(f"No model found under {model_name}")
+
+    print("Loading model...")
+    llm = Llama(model_path=model_name, chat_format="chatml", verbose=False)
+    return llm
 
 
 def main():
