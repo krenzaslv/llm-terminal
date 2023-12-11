@@ -2,14 +2,14 @@
 
 Interact with LLMs from your terminal. All models are executed locally on your machine.
 
-Don't remember a specific command? `llm-cli` can generate and execute terminal scripts for you. E.g `llm-cli cli "Move all files that are bigger than 1GB from /project to /tmp. Put the suffix 'to-big-' in front of each file."`
+Don't remember a specific command? `llm-terminal` can generate and execute terminal scripts for you. E.g `llm-terminal cli "Move all files that are bigger than 1GB from /project to /tmp. Put the suffix 'to-big-' in front of each file."`
 
 > [!WARNING]  
-> By default `llm-cli cli` will print the generated code and ask for permission to execute. Review the generated code carefully before execution. You can disable code review with the `--execute` flag.
+> By default `llm-terminal cli` will print the generated code and ask for permission to execute. Review the generated code carefully before execution. You can disable code review with the `--execute` flag.
 
 You can chat with a LLM from within your terminal with `llm-cli chat`.
 
-On first use, `llm-cli` downloads default models for chat and code generation. To specify a different model look at `llm-cli --help`.
+On first use, `llm-terminal` downloads default models for chat and code generation. To specify a different model look at `llm-terminal--help`.
 
 Features:
 
@@ -20,15 +20,15 @@ Features:
 ## Example usage
 
 ```
-llm-cli cli "List all files in ~/Downloads, sort by file size and output the file size in megabytes with the filename"
+llm-terminal cli "List all files in ~/Downloads, sort by file size and output the file size in megabytes with the filename"
 
-llm-cli cli "Rename all files in /project that start with 'test'. Replace 'test' with 'stage'"
+llm-terminal cli "Rename all files in /project that start with 'test'. Replace 'test' with 'stage'"
 
-cat pyproject.toml | head | llm-cli pipe --max-tokens 1000 "Explain line by line"
+cat pyproject.toml | head | llm-terminal pipe --max-tokens 1000 "Explain line by line"
 
-llm-cli chat
+llm-terminal chat
 
-llm-cli --help
+llm-terminal--help
 ```
 
 ## Installation
@@ -36,5 +36,5 @@ llm-cli --help
 ```
 python -m venv .venv
 . .venv/bin/activate
-pip install git+https://github.com/krenzaslv/llm-cli.git
+pip install git+https://github.com/krenzaslv/llm-terminal.git
 ```

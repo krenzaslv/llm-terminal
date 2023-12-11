@@ -3,10 +3,10 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "llm-cli"
+name = "llm-terminal"
 version = "0.0.1"
-description = "Small cli for llms"
-packages = [{include = "llmcli"}]
+description = "Large Language Models for the terminal"
+packages = [{include = "llmterminal"}]
 license = "GNU GPLv3"
 readme = "README.md"
 authors = ["krenzaslv"]
@@ -25,7 +25,7 @@ pyright = "^1.1.339"
 ruff = "^0.1.7"
 
 [tool.poetry.scripts]
-llm-cli = "llmcli.main:main"
+llm-terminal = "llmterminal.main:main"
 
 [tool.ruff]
 line-length=200
