@@ -1,4 +1,4 @@
-# Large Languge Models for the terminal
+# Large Language Models for the terminal
 
 Interact with LLMs from your terminal. All models are executed locally on your machine.
 
