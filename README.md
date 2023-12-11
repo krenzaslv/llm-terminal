@@ -7,7 +7,7 @@ Don't remember a specific command? `llm-terminal` can generate and execute termi
 > [!WARNING]  
 > By default `llm-terminal cli` will print the generated code and ask for permission to execute. Review the generated code carefully before execution. You can disable code review with the `--execute` flag.
 
-You can chat with a LLM from within your terminal with `llm-cli chat`.
+You can chat with a LLM from within your terminal with `llm-terminal chat`.
 
 On first use, `llm-terminal` downloads default models for chat and code generation. To specify a different model look at `llm-terminal--help`.
 
