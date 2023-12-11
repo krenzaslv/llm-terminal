@@ -24,7 +24,7 @@ llm-cli cli "List all files in ~/Downloads, sort by file size and output the fil
 
 llm-cli cli "Rename all files in /project that start with 'test'. Replace 'test' with 'stage'"
 
-cat pyproject.toml | llm-cli pipe --max-tokens 1000 "Explain line by line"
+cat pyproject.toml | head | llm-cli pipe --max-tokens 1000 "Explain line by line"
 
 llm-cli chat
 
