@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 name = "llm-cli"
 version = "0.0.1"
 description = "Small cli for llms"
-packages = [{include = "llm-cli"}]
+packages = [{include = "llmcli"}]
 license = "GNU GPLv3"
 readme = "README.md"
 authors = ["krenzaslv"]
@@ -25,7 +25,7 @@ pyright = "^1.1.339"
 ruff = "^0.1.7"
 
 [tool.poetry.scripts]
-llm-cli = "llm-cli.main:main"
+llm-cli = "llmcli.main:main"
 
 [tool.ruff]
 line-length=200
