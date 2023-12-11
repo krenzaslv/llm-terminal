@@ -2,3 +2,4 @@
 .venv
 gpt4allcli/__pycache__
 llmcli/__pycache__
+llm-cli/__pycache__
