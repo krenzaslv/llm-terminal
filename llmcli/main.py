@@ -1,8 +1,6 @@
-import os
 import subprocess
 import sys
 from typing import Annotated
-import huggingface_hub
 
 import typer
 from huggingface_hub import hf_hub_download
@@ -53,6 +51,7 @@ def chat(
 def cli(
     prompt: Annotated[str, typer.Argument(help="Prompt what bash script to generate")],
     model_name: Annotated[str, typer.Option(help="Model name")] = "codellama-7b-instruct.Q5_K_M.gguf",
+    execute: Annotated[bool, typer.Option(help="Execute code without review.")] = False,
     repo_id: Annotated[str, typer.Option(help="Name of the huggingface repo")] = "TheBloke/CodeLlama-7B-Instruct-GGUF",
     temp: Annotated[float, typer.Option(help="The model temperature between 0-1. Larger values increase creativity but decrease factuality.")] = 0.2,
     top_k: Annotated[int, typer.Option(help="Top k")] = 40,
@@ -85,9 +84,13 @@ def cli(
         responses.append(token)
 
     print("")
-    execute = typer.confirm("Do you want to execute the command?")
-    if execute:
+    if not execute:
+        execute = typer.confirm("Do you want to execute the command?")
+        if execute:
+            subprocess.run(["sh", "-c", f'{"".join(responses)}'])
+    else:
         subprocess.run(["sh", "-c", f'{"".join(responses)}'])
+
 
 
 @app.command("pipe")

@@ -4,6 +4,9 @@ Interact with LLMs from your terminal. All models are executed locally on your m
 
 Don't remember a specific command? `llm-cli` can generate and execute terminal scripts for you. E.g `llm-cli cli "Move all files in that are bigger than 1GB from /project to /tmp. Put the suffix 'to-big-' in front of each file."`
 
+[!WARNING]  
+By default `llm-cli cli` will print the generated code and ask for permission to execute. Review the generated code carefully before execution. You can disable code review with the `--execute` flag.
+
 You can chat with a LLM from within your terminal with `llm-cli chat`.
 
 On first use, `llm-cli` downloads default models for chat and code generation. To specify a different model look at `llm-cli --help`.
